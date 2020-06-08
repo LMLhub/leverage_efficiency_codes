@@ -1,0 +1,91 @@
+# This file specifies the model parameters used for all assets
+
+BTC :
+  long rate : 0.05
+  short rate : 0.05
+  samples per annum: 365.0
+  friction : 0.05
+  leverage resolution : 500
+  epsilon : 0.001
+
+SP500TR :
+  long rate : 0.05
+  short rate : 0.05
+  samples per annum: 365.0
+  friction : 0.01
+  leverage resolution : 500
+  epsilon : 0.001
+
+SP500 :
+  long rate : 0.05
+  short rate : 0.05
+  samples per annum: 365.0
+  friction : 0.01
+  leverage resolution : 500
+  epsilon : 0.001
+
+DAX :
+  long rate : 0.05
+  short rate : 0.05
+  samples per annum: 365.0
+  friction : 0.01
+  leverage resolution : 500
+  epsilon : 0.001
+
+BRK :
+  long rate : 0.05
+  short rate : 0.05
+  samples per annum: 365.0
+  friction : 0.01
+  leverage resolution : 500
+  epsilon : 0.001
+
+MAD :
+  long rate : 0.05
+  short rate : 0.05
+  samples per annum: 12.0
+  friction : 0.01
+  leverage resolution : 500
+  epsilon : 0.001
+
+# model_parameter.at['BTC','long_rate']=np.power(1.05,1./365)-1.0
+# model_parameter.at['BTC','short_rate']=np.power(1.05,1./365)-1.0
+# model_parameter.at['BTC','friction']=0.05
+# model_parameter.at['BTC','leverage_resolution']=500
+# model_parameter.at['BTC','eps']=0.001
+#
+# model_parameter.at['SPD','long_rate']=np.power(1.05,1./365)-1.0
+# model_parameter.at['SPD','short_rate']=np.power(1.05,1./365)-1.0
+# model_parameter.at['SPD','friction']=0.01
+# model_parameter.at['SPD','leverage_resolution']=500
+# model_parameter.at['SPD','eps']=0.001
+#
+# model_parameter.at['SP500TR','long_rate']=np.power(1.05,1./365)-1.0
+# model_parameter.at['SP500TR','short_rate']=np.power(1.05,1./365)-1.0
+# model_parameter.at['SP500TR','friction']=0.01
+# model_parameter.at['SP500TR','leverage_resolution']=500
+# model_parameter.at['SP500TR','eps']=0.001
+#
+# model_parameter.at['SP500','long_rate']=np.power(1.05,1./365)-1.0
+# model_parameter.at['SP500','short_rate']=np.power(1.05,1./365)-1.0
+# model_parameter.at['SP500','friction']=0.01
+# model_parameter.at['SP500','leverage_resolution']=500
+# model_parameter.at['SP500','eps']=0.001
+#
+# model_parameter.at['DAX','long_rate']=np.power(1.05,1./365)-1.0
+# model_parameter.at['DAX','short_rate']=np.power(1.05,1./365)-1.0
+# model_parameter.at['DAX','friction']=0.01
+# model_parameter.at['DAX','leverage_resolution']=500
+# model_parameter.at['DAX','eps']=0.001
+#
+# model_parameter.at['MAD','long_rate']=np.power(1.05,1./12)-1.0
+# model_parameter.at['MAD','short_rate']=np.power(1.05,1./12)-1.0
+# model_parameter.at['MAD','friction']=0.01
+# model_parameter.at['MAD','leverage_resolution']=500
+# model_parameter.at['MAD','eps']=0.001
+#
+# model_parameter.at['BRK','long_rate']=np.power(1.05,1./365)-1.0
+# model_parameter.at['BRK','short_rate']=np.power(1.05,1./365)-1.0
+# model_parameter.at['BRK','friction']=0.01
+# model_parameter.at['BRK','leverage_resolution']=500
+# model_parameter.at['BRK','eps']=0.001

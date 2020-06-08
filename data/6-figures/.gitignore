@@ -1,0 +1,8 @@
+# .gitignore sample
+###################
+
+# Ignore all pdf files in this dir...
+*.pdf
+
+# ... except for this one.
+!.gitignore

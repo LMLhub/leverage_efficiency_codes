@@ -1,0 +1,38 @@
+--- # Leverage efficiency config file
+
+# This file allows control over the data processing pipeline without any need
+# to edit the code.
+
+data_folder: './data/4-load/'
+analysis_folder: './data/5-analysis/'
+plots_folder: './data/6-figures/lecture_notes/'
+
+analysis:
+  pairs:
+    - SP500-FED
+    - BTC-FED
+    - BRK-FED
+    - MAD-FEDM
+  analysis stages:
+     calculate grids: False
+     fit parameters: False
+     expanding window calculations: False
+     l_opt variance calculations: False
+     fixed window calculations: False
+
+
+plots:
+  pairs:
+    - SP500-FED
+#    - BTC-FED
+#    - BRK-FED
+#    - MAD-FEDM
+  figures:
+    equity trajectories: False
+    final equity vs leverage: False
+    growth rate vs leverage: False
+    growth rate vs leverage all: True
+    l_opt variance: False
+    expanding windows: False
+    fixed windows: False
+    compare assets: False

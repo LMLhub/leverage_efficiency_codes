@@ -1,0 +1,75 @@
+--- # Leverage efficiency config file
+
+# This file allows control over the data processing pipeline without any need
+# to edit the code.
+
+# This section specifies the folder structure
+source data folder: './data/1-source/'
+intermediate data folder: './data/2-intermediate/'
+updated data folder: './data/3-update/'
+data_folder: './data/4-load/'
+analysis_folder: './data/5-analysis/'
+plots_folder: './data/6-figures/'
+
+# This section specifies which data sets to process in the extract, transform and update
+# pipeline stages
+data processing stages:
+  run: True
+  assets:
+    - BRK
+    - BTC
+    - MAD
+    - SP500
+    - SP500TR
+  daily interest rates:
+    - FED
+    - DGS10
+  monthly interest rates:
+    - FEDM
+
+# This section provides control over the various steps in the analysis pipeline
+# stage, including which pairs to analyse and which steps of the analysis to run
+# and what parameters to pass into the analysis.
+analysis:
+  run: True
+  pairs:
+    - BRK-FED
+    - BTC-FED
+    - MAD-FEDM
+    - SP500-FED
+    - SP500-DGS10
+    - SP500TR-FED
+    - SP500TR-DGS10
+
+  analysis stages:
+     calculate grids: True
+     fit parameters: True
+     expanding window calculations: False
+     l_opt variance calculations: False
+     fixed window calculations: False
+
+# This section provides control over the plots pipeline stage, including which
+# pairs to plots and which figures to generate for each pair.
+plots:
+  run: False
+  pairs:
+  figures:
+    equity trajectories: True
+    final equity vs leverage: True
+    growth rate vs leverage: True
+    l_opt variance: True
+    expanding windows: True
+    fixed windows: True
+    compare assets: False
+
+# Turning this one will run the paper_plots.py stage which generates the
+# plots used in the manuscript. This assumes that the relevant data analysis
+# has been performed by the previous stages.
+paper plots:
+  run: False
+
+# Turning this one will run the lecture_plots.py stage which generates the
+# plots used in the EE lecture notes. This again assumes that all relevant data
+# analyses have been performed by the previous stages.
+lecture plots:
+  run: False

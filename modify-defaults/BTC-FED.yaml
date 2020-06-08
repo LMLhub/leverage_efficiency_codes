@@ -1,0 +1,19 @@
+# This file contains settings for this specific pair
+
+# Set the window sizes to be used in the fixed window calculation. This
+# over-rides the default values
+window sizes:
+  - 1
+  - 2
+  - 3
+  - 4
+# Specify which models to run. Default is to run all 3.
+models to run:
+  - 1
+  - 2
+  - 3
+# Specify start and end dates for the analysis. Default is to use the maximum
+# available date range
+dates:
+  start: min
+  end: max
