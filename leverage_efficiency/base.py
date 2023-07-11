@@ -98,7 +98,7 @@ def input_sanity_checks(df):
         returnValue = False
 
     # Check that all dates are contiguous
-    est_freq = pd.infer_freq(df.index, warn=True)
+    est_freq = pd.infer_freq(df.index)
     if not est_freq in ['D', 'M','MS']:
         print('  Failed to verify that data is daily or monthly.' )
         returnValue = False

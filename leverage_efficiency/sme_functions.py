@@ -172,6 +172,10 @@ def fit_parameters(data_folder, analysis_folder, pair):
  leveraged_returns=pd.read_pickle(analysis_folder+pair+"-1.pkl")
  leveraged_equity=np.cumprod(leveraged_returns)
  final_leveraged_equity=leveraged_equity[-1:].T
+  # Reformat this to a sensible configuration
+ final_leveraged_equity.columns = ['equity']
+ final_leveraged_equity.index.names = ['leverage']
+ final_leveraged_equity = final_leveraged_equity.astype({'equity':'float64'})
  leveraged_growth=np.log(final_leveraged_equity)/years
 
 #create x and y data to be used for curve fitting

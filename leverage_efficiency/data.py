@@ -55,10 +55,12 @@ def extract_BTC_data(source_folder, target_folder):
     print("  Extracting BTC data.")
     # Bitcoin Price Index from Coindesk
     inputfile1 = source_folder+'BPI_2010-07-18_2018-04-06_Coindesk.csv'
+    date_format1 = '%Y-%m-%d %H:%M:%S'
     # BTC-USC FX pair from Yahoo Finance
     inputfile2 = source_folder+'BTC-USD_2014-09-17_2020-05-01_YF.csv'
+    date_format2 = '%Y-%m-%d'
     # Need to specify the date format used by these files
-    date_format = '%Y-%m-%d'
+
     # Output files
     outputfile = target_folder+'BTC'
 
@@ -67,15 +69,17 @@ def extract_BTC_data(source_folder, target_folder):
     df2 = pd.read_csv(inputfile2)
 
     # Standardise the column names and indices
-    for df in [df1, df2]:
-        df = standardise_columns(df, date_format)
-        df = standardise_index(df)
+    df1 = standardise_columns(df1, date_format1)
+    df1 = standardise_index(df1)
+    df2 = standardise_columns(df2, date_format2)
+    df2 = standardise_index(df2)
 
     # Splice these timeseries together at these dates:
     d1 = datetime.date(2014, 9, 16)
     d2 = datetime.date(2014, 9, 17)
     # Append the relevant slice of df2 to the relevant slice of df1
-    df3 = df1.loc[:d1].append(df2.loc[d2:])
+    #df3 = df1.loc[:d1].append(df2.loc[d2:])
+    df3 = pd.concat([ df1.loc[:d1], df2.loc[d2:] ])
 
     # Write output
     df3.to_csv(outputfile+'.csv')
@@ -106,7 +110,7 @@ def extract_SP500_data(source_folder, target_folder):
     # SP500 index from Yahoo Finance
     inputfile = source_folder+'SP500_1927-12-31_2020-05-14.csv'
     # Need to specify the date format used by these files
-    date_format = '%Y/%m/%d'
+    date_format = '%Y-%m-%d'
     # Output file
     outputfile = target_folder+'SP500'
 
@@ -214,7 +218,8 @@ def extract_FED_data(source_folder, target_folder):
     d1 = datetime.date(1954,6,30)
     d2 = datetime.date(1954,7,1)
     # Append the relevant slice of df2 to the relevant slice of df1
-    df3 = df1.loc[:d1].append(df2.loc[d2:])
+    #df3 = df1.loc[:d1].append(df2.loc[d2:])
+    df3=pd.concat([df1.loc[:d1],df2.loc[d2:]])
 
     # Write output
     df3.to_csv(outputfile+'.csv')
