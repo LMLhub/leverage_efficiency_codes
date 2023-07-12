@@ -314,6 +314,29 @@ def extract_Madoff_data(source_folder, target_folder):
     df.to_csv(outputfile+'.csv')
     df.to_pickle(outputfile+'.pkl')
 
+def extract_SMT_data(source_folder, target_folder):
+    print("  Extracting SMT data.")
+    # SMT Total Return data
+    inputfile = source_folder+'SMT_1964-12-30_2022-03-31.xlsx'
+    # Need to specify the date format used by these files
+    date_format = '%d/%m/%Y'
+    # Output file
+    outputfile = target_folder+'SMT'
+
+    # Read in raw data
+    xl = pd.ExcelFile(str(inputfile))
+    df = xl.parse('Sheet1', header=2)
+    df.drop(['Unnamed: 0','Unnamed: 3', 'Unnamed: 4', 'Unnamed: 5'], axis=1, inplace=True)
+    df.rename(columns={'Name':'date', 'SCOTTISH MORTGAGE':'level'}, inplace=True)
+
+    # Standardise the column names and index
+    df = standardise_columns(df, date_format)
+    df = standardise_index(df)
+
+    # Write output
+    df.to_csv(outputfile+'.csv')
+    df.to_pickle(outputfile+'.pkl')
+
 # Functions to transform intermediate data into input format
 def prepare_input_asset_data(source_folder, target_folder, tag):
     inputfile = source_folder+tag+'.pkl'

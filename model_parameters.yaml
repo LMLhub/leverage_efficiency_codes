@@ -48,6 +48,14 @@ MAD :
   leverage resolution : 500
   epsilon : 0.001
 
+SMT :
+  long rate : 0.05
+  short rate : 0.05
+  samples per annum: 365.0
+  friction : 0.01
+  leverage resolution : 500
+  epsilon : 0.001
+
 # model_parameter.at['BTC','long_rate']=np.power(1.05,1./365)-1.0
 # model_parameter.at['BTC','short_rate']=np.power(1.05,1./365)-1.0
 # model_parameter.at['BTC','friction']=0.05

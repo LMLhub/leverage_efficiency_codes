@@ -45,6 +45,8 @@ def main(config_file):
             data.extract_DGS10_data(source_folder, target_folder)
         if 'MAD' in all_keys:
             data.extract_Madoff_data(source_folder, target_folder)
+        if 'SMT' in all_keys:
+            data.extract_SMT_data(source_folder, target_folder)
 
 # Execute the main() function
 
