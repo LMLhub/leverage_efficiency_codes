@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import matplotlib.ticker as mticker
 import numpy as np
 import pandas as pd
 import pickle
@@ -170,6 +171,7 @@ def fig_growth_vs_leverage(analysis_folder, plots_folder, pair):
     plt.xlim([-9,12])
     #plt.xlim([final_equity_1.index.min(),final_equity_1.index.max()])
     vals = ax.get_yticks()
+    ax.yaxis.set_major_locator(mticker.FixedLocator(vals))
     ax.set_yticklabels(['{:3.0f}% p.a.'.format(100*x) for x in vals])
     plt.xlabel('leverage')
     plt.ylabel('growth rate')
