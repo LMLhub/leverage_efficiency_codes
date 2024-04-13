@@ -30,6 +30,13 @@ def main(config_file):
                 fig.savefig(outputfile, bbox_inches='tight')
                 plt.close()
 
+        if figures['expanding windows significance']:
+            for pair in pairs:
+                outputfile = plots_folder+pair+'_lopt_exp_window_significance.pdf'
+                fig, ax = figs.fig_exp_window_significance(analysis_folder,   pair)
+                fig.savefig(outputfile, bbox_inches='tight')
+                plt.close()
+
         if figures['growth rate vs leverage']:
             for pair in pairs:
                 outputfile = plots_folder+pair+'_growth_vs_leverage.pdf'

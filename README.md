@@ -28,6 +28,7 @@ BTC | Bitcoin | https://finance.yahoo.com/quote/BTC-USD/history?p=BTC-USD and ht
 BRK | Berkshire Hathaway shares | https://finance.yahoo.com/quote/BRK-A/history?p=BRK-A
 MAD | Madoff ponzi scheme | http://lml.org.uk/wp-content/uploads/2019/12/madoff.csv
 DAX | DAX performance index | https://finance.yahoo.com/quote/%5EGDAXI/history?p=%5EGDAXI
+SMT | Scottish Mortgage fund | provided by Baillie-Gifford
 
 ## "Riskless" assets
 key | data set | Source
@@ -35,6 +36,7 @@ key | data set | Source
 FED | Federal Reserve overnight rates | https://fred.stlouisfed.org/series/FEDFUNDS and https://t.co/FDm5p3P828?amp=1
 DGS10 | 10-year US Treasury bonds | https://fred.stlouisfed.org/series/DGS10
 IRDE | Immediate Rates: Less than 24 Hours: Call Money/Interbank Rate for Germany | https://fred.stlouisfed.org/series/IRSTCI01DEM156N
+BOE | Bank of England Official Bank Rate | https://www.bankofengland.co.uk/boeapps/database/Bank-Rate.asp
 
 # How to run the code
 

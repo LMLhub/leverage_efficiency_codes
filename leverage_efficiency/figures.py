@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import pickle
 from datetime import datetime
+from scipy.stats import norm
 
 def standard_plot(dataframe, columns, labels, ratio=1.0):
     # Create figure and axes objects for plotting to
@@ -57,6 +58,46 @@ def fig_exp_window(analysis_folder, pair):
     plt.legend(loc='best')
     plt.xlim([lopt_1.index[0],lopt_1.index[-1]])
     plt.ylim([1.5*l_min,1.5*l_max])
+    return fig, ax
+
+def fig_exp_window_significance(analysis_folder, pair):
+    print('Figure: fig_exp_window_significance() : '+pair)
+
+    # Read in optimal leverage values for this asset pair
+    lopt_1=pd.read_pickle(analysis_folder+pair+"-1_lopt_exp.pkl")
+#    lopt_2=pd.read_pickle(analysis_folder+pair+"-2_lopt_exp.pkl")
+#    lopt_3=pd.read_pickle(analysis_folder+pair+"-3_lopt_exp.pkl")
+
+    # Read in parameter information for this asset pair
+    filename = analysis_folder+pair+'_prm.pkl'
+    f=open(filename, 'rb')
+    parameters = pickle.load(f)[pair]
+    f.close()
+    sigma=parameters['sigma_est']
+    l_max=parameters['max_leverage']
+    l_min=parameters['min_leverage']
+
+    # Create plot
+    fig=plt.figure()
+    ax = plt.axes()
+    # Add data lines
+#    plt.plot(lopt_1.index,1+1./np.sqrt(sigma*sigma*(lopt_1.index-lopt_1.index[0]).days/365.25),color='pink',linestyle='--')
+#    plt.plot(lopt_1.index,1-1./np.sqrt(sigma*sigma*(lopt_1.index-lopt_1.index[0]).days/365.25),color='pink',linestyle='--')
+#    plt.plot(lopt_1.index,1+2./np.sqrt(sigma*sigma*(lopt_1.index-lopt_1.index[0]).days/365.25),color='pink',linestyle=':')
+#    plt.plot(lopt_1.index,1-2./np.sqrt(sigma*sigma*(lopt_1.index-lopt_1.index[0]).days/365.25),color='pink',linestyle=':')
+#    plt.plot(lopt_1, label='simple')
+    z_score=(lopt_1-1)*np.sqrt(sigma*sigma*(lopt_1.index-lopt_1.index[0]).days/365.25)
+    exceedance_probability=1 - norm.cdf(z_score)
+    plt.plot(z_score)
+#    plt.plot(lopt_1.index,exceedance_probability)
+    # Add remaining plot details
+    plt.xlabel('end date')
+    plt.ylabel('stability/performance index')
+    plt.axhline(y=1,linestyle=':',color='grey',linewidth=.5)
+    plt.axhline(y=0,linestyle=':',color='grey',linewidth=.5)
+    plt.legend(loc='best')
+    plt.xlim([lopt_1.index[0],lopt_1.index[-1]])
+    plt.ylim([0,2.5])
     return fig, ax
 
 

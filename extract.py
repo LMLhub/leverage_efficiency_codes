@@ -37,6 +37,8 @@ def main(config_file):
             data.extract_BRK_data(source_folder, target_folder)
         if 'FED' in all_keys:
             data.extract_FED_data(source_folder, target_folder)
+        if 'BOE' in all_keys:
+            data.extract_BOE_data(source_folder, target_folder)
         if 'FEDM' in all_keys:
             data.extract_FEDM_data(source_folder, target_folder)
         if 'IRDE' in all_keys:

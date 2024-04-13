@@ -270,6 +270,31 @@ def extract_DGS10_data(source_folder, target_folder):
     df.to_csv(outputfile+'.csv')
     df.to_pickle(outputfile+'.pkl')
 
+def extract_BOE_data(source_folder, target_folder):
+    print("  Extracting BOE data.")
+    # Bank of England official bank rate
+    inputfile = source_folder+'Bank Rate history and data Bank of England Database.csv'
+    # Need to specify the date format used by this file
+    date_format = '%d %b %y'
+    # Output file
+    outputfile = target_folder+'BOE'
+
+    # Read in raw data
+    df = pd.read_csv(inputfile)
+
+    # This data file contains some '.'s in the level column that need to be
+    # filtered out
+    #df = df[~(df['DGS10']=='.')]
+    #df['DGS10'] = df['DGS10'].astype(float)
+
+    # Standardise the column names and index
+    df = standardise_columns(df, date_format)
+    df = standardise_index(df, fill_method='forward fill')
+
+    # Write output
+    df.to_csv(outputfile+'.csv')
+    df.to_pickle(outputfile+'.pkl')
+
 def extract_IRDE_data(source_folder, target_folder):
     print("  Extracting German IR data.")
     # SP500 Total Return index from Yahoo Finance
@@ -316,26 +341,49 @@ def extract_Madoff_data(source_folder, target_folder):
 
 def extract_SMT_data(source_folder, target_folder):
     print("  Extracting SMT data.")
-    # SMT Total Return data
-    inputfile = source_folder+'SMT_1964-12-30_2022-03-31.xlsx'
-    # Need to specify the date format used by these files
-    date_format = '%d/%m/%Y'
+    # SMT Total Return data from BG
+    inputfile1 = source_folder+'SMT_1964-12-30_2022-03-31.xlsx'
+    date_format1 = '%d/%m/%Y'
+    # SMT data from yahoo! finance
+    inputfile2 = source_folder+'SMT.L.csv'
+    date_format2 = '%Y-%m-%d'
     # Output file
     outputfile = target_folder+'SMT'
 
     # Read in raw data
-    xl = pd.ExcelFile(str(inputfile))
-    df = xl.parse('Sheet1', header=2)
-    df.drop(['Unnamed: 0','Unnamed: 3', 'Unnamed: 4', 'Unnamed: 5'], axis=1, inplace=True)
-    df.rename(columns={'Name':'date', 'SCOTTISH MORTGAGE':'level'}, inplace=True)
+    xl = pd.ExcelFile(str(inputfile1))
+    df1 = xl.parse('Sheet1', header=2)
+    df2 = pd.read_csv(inputfile2)
+    df1.drop(['Unnamed: 0','Unnamed: 3', 'Unnamed: 4', 'Unnamed: 5'], axis=1, inplace=True)
+    df1.rename(columns={'Name':'date', 'SCOTTISH MORTGAGE':'level'}, inplace=True)
 
     # Standardise the column names and index
-    df = standardise_columns(df, date_format)
-    df = standardise_index(df)
+    df1 = standardise_columns(df1, date_format1)
+    df1 = standardise_index(df1)
+    df2 = standardise_columns(df2[['Date','Adj Close']], date_format2)
+    df2 = standardise_index(df2)
+
+
+    # Splice these timeseries together at these dates:
+#    d1 = datetime.date(1968, 12, 30)
+#    d2 = datetime.date(1968, 12, 31)
+#    # Append the relevant slice of df2 to the relevant slice of df1
+#    #df3 = df1.loc[:d1].append(df2.loc[d2:])
+#    df3 = pd.concat([ df1.loc[:d1], df2.loc[d2:] ])
 
     # Write output
-    df.to_csv(outputfile+'.csv')
-    df.to_pickle(outputfile+'.pkl')
+#    df3.to_csv(outputfile+'.csv')
+#    df3.to_pickle(outputfile+'.pkl')
+
+
+    # Write output
+    df2.to_csv(outputfile+'.csv')
+    df2.to_pickle(outputfile+'.pkl')
+
+    #Note: we're not splicing the two data sets together here because they are incompatible.
+    #it's unclear what the adjusted prices in the BG data set are, so restricting to yahoo! here.
+    #We're ignoring the BG data set for now (it's only 4 more years that yahoo!).
+
 
 # Functions to transform intermediate data into input format
 def prepare_input_asset_data(source_folder, target_folder, tag):
