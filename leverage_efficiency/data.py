@@ -273,7 +273,7 @@ def extract_DGS10_data(source_folder, target_folder):
 def extract_BOE_data(source_folder, target_folder):
     print("  Extracting BOE data.")
     # Bank of England official bank rate
-    inputfile = source_folder+'Bank Rate history and data Bank of England Database.csv'
+    inputfile = source_folder+'BOE_1975-01-20_2023-08-03.csv'
     # Need to specify the date format used by this file
     date_format = '%d %b %y'
     # Output file

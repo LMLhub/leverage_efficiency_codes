@@ -1,0 +1,34 @@
+# YAML file containing information helpful for updating the source data
+
+existing data folder: './data/1-source/'
+new data folder: './data/3-update/'
+
+risky assets:
+  - BTC
+  - MAD
+  - SP500
+  - SP500TR
+  - DAX
+  - BRK
+  - SMT
+
+riskless assets:
+  - FED
+  - BOE
+  - DGS10
+  - IRDE
+
+# Define key-value pairs
+#key1: value1
+#key2: value2
+
+# Define nested objects
+#nested:
+#  key3: value3
+#  key4: value4
+
+# Define a boolean value
+#boolean: true
+
+# Define a null value
+# null_value: null

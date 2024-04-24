@@ -14,7 +14,7 @@ plots_folder: './data/6-figures/'
 # This section specifies which data sets to process in the extract, transform and update
 # pipeline stages
 data processing stages:
-  run: True
+  run: False
   assets:
     - BTC
     - MAD
@@ -28,7 +28,7 @@ data processing stages:
 # stage, including which pairs to analyse and which steps of the analysis to run
 # and what parameters to pass into the analysis.
 analysis:
-  run: True
+  run: False
   pairs:
     - BTC-FED
     - SP500-FED
@@ -49,6 +49,7 @@ plots:
     - BTC-FED
     - SP500-FED
   figures:
+    expanding windows significance: True
     equity trajectories: True
     final equity vs leverage: True
     growth rate vs leverage: True
