@@ -20,8 +20,13 @@ data processing stages:
     - BTC
     - MAD
     - SP500
+    - SP500TR
+    - SMT
+    - DAX
   daily interest rates:
     - FED
+    - DGS10
+    - IRDE
   monthly interest rates:
     - FEDM
 

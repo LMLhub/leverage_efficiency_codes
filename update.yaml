@@ -2,6 +2,7 @@
 
 existing data folder: './data/1-source/'
 new data folder: './data/3-update/'
+intermediate data folder: './data/2-intermediate/append/'
 download new data: False
 
 assets:

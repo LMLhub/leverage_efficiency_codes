@@ -51,11 +51,12 @@ def standardise_index(df, fill_method='forward fill'):
     df.index = df.index.rename('date')
     return df
 
-def extract_BTC_data(source_folder, target_folder, sourcedata):
+def extract_BTC_data(source_folder, target_folder, sourcedata, update=False):
     print("  Extracting BTC data.")
-    # Old Bitcoin Price Index from Coindesk - never updates
-    inputfile1 = source_folder+'BPI_2010-07-18_2018-04-06_Coindesk.csv'
-    date_format1 = '%Y-%m-%d %H:%M:%S'
+    if not update:
+        # Old Bitcoin Price Index from Coindesk - never updates
+        inputfile1 = source_folder+'BPI_2010-07-18_2018-04-06_Coindesk.csv'
+        date_format1 = '%Y-%m-%d %H:%M:%S'
     # BTC-USC FX pair from Yahoo Finance. Can be updated.
     inputfile2 = source_folder+sourcedata
     date_format2 = '%Y-%m-%d'
@@ -64,36 +65,44 @@ def extract_BTC_data(source_folder, target_folder, sourcedata):
     outputfile = target_folder+'BTC'
 
     # Read in the raw data
-    df1 = pd.read_csv(inputfile1, skipfooter=3, engine='python')
-    df2 = pd.read_csv(inputfile2)
+    if not update:
+        df1 = pd.read_csv(inputfile1, skipfooter=3, engine='python')
+        df2 = pd.read_csv(inputfile2)
+    else:
+        df2 = pd.read_csv(inputfile2)[["Date","Close"]]
 
     # Standardise the column names and indices
-    df1 = standardise_columns(df1, date_format1)
-    df1 = standardise_index(df1)
+    if not update:
+        df1 = standardise_columns(df1, date_format1)
+        df1 = standardise_index(df1)
     df2 = standardise_columns(df2, date_format2)
     df2 = standardise_index(df2)
 
-    # Splice these timeseries together at these dates:
-    d1 = datetime.date(2014, 9, 16)
-    d2 = datetime.date(2014, 9, 17)
-    # Append the relevant slice of df2 to the relevant slice of df1
-    #df3 = df1.loc[:d1].append(df2.loc[d2:])
-    df3 = pd.concat([ df1.loc[:d1], df2.loc[d2:] ])
+    if not update:
+        # Splice these timeseries together at these dates:
+        d1 = datetime.date(2014, 9, 16)
+        d2 = datetime.date(2014, 9, 17)
+        # Append the relevant slice of df2 to the relevant slice of df1
+        df3 = pd.concat([ df1.loc[:d1], df2.loc[d2:] ])
+    else:
+        df3 = df2
 
     # Write output
     df3.to_csv(outputfile+'.csv')
     df3.to_pickle(outputfile+'.pkl')
 
-def extract_SP500TR_data(source_folder, target_folder, sourcedata):
+def extract_SP500TR_data(source_folder, target_folder, sourcedata, update=False):
     print("  Extracting SP500 TR data.")
     # SP500 Total Return index from Yahoo Finance
-    inputfile = source_folder+'SP500TR_1988-01-04_2020-04-30_YF.csv'
+    #inputfile = source_folder+'SP500TR_1988-01-04_2020-04-30_YF.csv'
+    inputfile = source_folder+sourcedata
     # Need to specify the date format used by these files
     date_format = '%Y-%m-%d'
     # Output file
     outputfile = target_folder+'SP500TR'
 
     # Read in raw data
+    print(inputfile)
     df = pd.read_csv(inputfile)[['Date','Close']]
 
     # Standardise the column names and index
@@ -104,10 +113,11 @@ def extract_SP500TR_data(source_folder, target_folder, sourcedata):
     df.to_csv(outputfile+'.csv')
     df.to_pickle(outputfile+'.pkl')
 
-def extract_SP500_data(source_folder, target_folder, sourcedata):
+def extract_SP500_data(source_folder, target_folder, sourcedata, update=False):
     print("  Extracting SP500 data.")
     # SP500 index from Yahoo Finance
-    inputfile = source_folder+'SP500_1927-12-31_2020-05-14.csv'
+    #inputfile = source_folder+'SP500_1927-12-31_2020-05-14.csv'
+    inputfile = source_folder+sourcedata
     # Need to specify the date format used by these files
     date_format = '%Y-%m-%d'
     # Output file
@@ -124,10 +134,11 @@ def extract_SP500_data(source_folder, target_folder, sourcedata):
     df.to_csv(outputfile+'.csv')
     df.to_pickle(outputfile+'.pkl')
 
-def extract_DAX_data(source_folder, target_folder, sourcedata):
+def extract_DAX_data(source_folder, target_folder, sourcedata, update=False):
     print("  Extracting DAX data.")
     # DAX index from Yahoo Finance
-    inputfile = source_folder+'DAX_1987-12-30_2020-04-30_YF.csv'
+    #inputfile = source_folder+'DAX_1987-12-30_2020-04-30_YF.csv'
+    inputfile = source_folder+sourcedata
     # Need to specify the date format used by this file
     date_format = '%Y-%m-%d'
     # Output file
@@ -144,10 +155,11 @@ def extract_DAX_data(source_folder, target_folder, sourcedata):
     df.to_csv(outputfile+'.csv')
     df.to_pickle(outputfile+'.pkl')
 
-def extract_BRK_data(source_folder, target_folder, sourcedata):
+def extract_BRK_data(source_folder, target_folder, sourcedata, update=False):
     print("  Extracting BRK data.")
     # Berkshire share price from Yahoo Finance
-    inputfile = source_folder+'BRK_1980-03-17_2020-04-30_YF.csv'
+    #inputfile = source_folder+'BRK_1980-03-17_2020-04-30_YF.csv'
+    inputfile = source_folder+sourcedata
     # Need to specify the date format used by this file
     date_format = '%Y-%m-%d'
     # Output file
@@ -155,6 +167,7 @@ def extract_BRK_data(source_folder, target_folder, sourcedata):
 
     # Read in raw data
     df = pd.read_csv(inputfile)[['Date','Close']]
+    print(df.head())
 
     # Standardise the column names and index
     df = standardise_columns(df, date_format)
@@ -184,13 +197,14 @@ def extract_BRK_data(source_folder, target_folder, sourcedata):
 #     df.to_csv(outputfile+'.csv')
 #     df.to_pickle(outputfile+'.pkl')
 
-def extract_FED_data(source_folder, target_folder, sourcedata):
+def extract_FED_data(source_folder, target_folder, sourcedata, update=False):
     print("  Extracting FED data.")
     # Federal overnight rates from https://t.co/FDm5p3P828?amp=1
     inputfile1 = source_folder+'FED_1927-12-30_2020-05-14.csv'
     date_format1 = '%Y%m%d'
    # Federal overnight rates from FRED
-    inputfile2 = source_folder+'FED_1954-07-01_2020-03-01-FRED.csv'
+    #inputfile2 = source_folder+'FED_1954-07-01_2020-03-01-FRED.csv'
+    inputfile2 = source_folder+sourcedata
     # Need to specify the date format used by this file
     date_format2 = '%Y-%m-%d'
     # Output file
@@ -224,10 +238,11 @@ def extract_FED_data(source_folder, target_folder, sourcedata):
     df3.to_csv(outputfile+'.csv')
     df3.to_pickle(outputfile+'.pkl')
 
-def extract_FEDM_data(source_folder, target_folder, sourcedata):
+def extract_FEDM_data(source_folder, target_folder, sourcedata, update=False):
     print("  Extracting FED monthly data.")
     # Federal overnight rates from FRED
-    inputfile = source_folder+'FED_1954-07-01_2020-03-01-FRED.csv'
+    #inputfile = source_folder+'FED_1954-07-01_2020-03-01-FRED.csv'
+    inputfile = source_folder+sourcedata
     # Need to specify the date format used by this file
     date_format = '%Y-%m-%d'
     # Output file
@@ -244,10 +259,11 @@ def extract_FEDM_data(source_folder, target_folder, sourcedata):
     df.to_csv(outputfile+'.csv')
     df.to_pickle(outputfile+'.pkl')
 
-def extract_DGS10_data(source_folder, target_folder, sourcedata):
+def extract_DGS10_data(source_folder, target_folder, sourcedata, update=False):
     print("  Extracting DGS10 data.")
     # 10-Year Treasury Constant Maturity Rates from FRED
-    inputfile = source_folder+'DGS10_1962-01-02_2020-05-07_FRED.csv'
+    #inputfile = source_folder+'DGS10_1962-01-02_2020-05-07_FRED.csv'
+    inputfile = source_folder+sourcedata
     # Need to specify the date format used by this file
     date_format = '%Y-%m-%d'
     # Output file
@@ -269,10 +285,11 @@ def extract_DGS10_data(source_folder, target_folder, sourcedata):
     df.to_csv(outputfile+'.csv')
     df.to_pickle(outputfile+'.pkl')
 
-def extract_BOE_data(source_folder, target_folder, sourcedata):
+def extract_BOE_data(source_folder, target_folder, sourcedata, update=False):
     print("  Extracting BOE data.")
     # Bank of England official bank rate
-    inputfile = source_folder+'BOE_1975-01-20_2023-08-03.csv'
+    #inputfile = source_folder+'BOE_1975-01-20_2023-08-03.csv'
+    inputfile = source_folder+sourcedata
     # Need to specify the date format used by this file
     date_format = '%d %b %y'
     # Output file
@@ -294,10 +311,11 @@ def extract_BOE_data(source_folder, target_folder, sourcedata):
     df.to_csv(outputfile+'.csv')
     df.to_pickle(outputfile+'.pkl')
 
-def extract_IRDE_data(source_folder, target_folder, sourcedata):
+def extract_IRDE_data(source_folder, target_folder, sourcedata, update=False):
     print("  Extracting German IR data.")
     # SP500 Total Return index from Yahoo Finance
-    inputfile = source_folder+'IRDE_1960-01-01_2020-03-01-FRED.csv'
+    #inputfile = source_folder+'IRDE_1960-01-01_2020-03-01-FRED.csv'
+    inputfile = source_folder+sourcedata
     # Need to specify the date format used by this file
     date_format = '%Y-%m-%d'
     # Output file
@@ -314,10 +332,11 @@ def extract_IRDE_data(source_folder, target_folder, sourcedata):
     df.to_csv(outputfile+'.csv')
     df.to_pickle(outputfile+'.pkl')
 
-def extract_Madoff_data(source_folder, target_folder, sourcedata):
+def extract_Madoff_data(source_folder, target_folder, sourcedata, update=False):
     print("  Extracting Madoff data.")
     # Madoff data
-    inputfile = source_folder+'MAD_1990-01-01_2005-05-01_DU.csv'
+    #inputfile = source_folder+'MAD_1990-01-01_2005-05-01_DU.csv'
+    inputfile = source_folder+sourcedata
     # Need to specify the date format used by this file
     date_format = '%d/%m/%y'
     # Output file
@@ -338,28 +357,32 @@ def extract_Madoff_data(source_folder, target_folder, sourcedata):
     df.to_csv(outputfile+'.csv')
     df.to_pickle(outputfile+'.pkl')
 
-def extract_SMT_data(source_folder, target_folder, sourcedata):
+def extract_SMT_data(source_folder, target_folder, sourcedata, update=False):
     print("  Extracting SMT data.")
     # SMT Total Return data from BG
-    inputfile1 = source_folder+'SMT_1964-12-30_2022-03-31.xlsx'
-    date_format1 = '%d/%m/%Y'
+    #inputfile1 = source_folder+'SMT_1964-12-30_2022-03-31.xlsx'
+    #date_format1 = '%d/%m/%Y'
     # SMT data from yahoo! finance
-    inputfile2 = source_folder+'SMT.L.csv'
+    #inputfile2 = source_folder+'SMT.L.csv'
+    inputfile2 = source_folder+sourcedata
     date_format2 = '%Y-%m-%d'
     # Output file
     outputfile = target_folder+'SMT'
 
     # Read in raw data
-    xl = pd.ExcelFile(str(inputfile1))
-    df1 = xl.parse('Sheet1', header=2)
+    #xl = pd.ExcelFile(str(inputfile1))
+    #df1 = xl.parse('Sheet1', header=2)
     df2 = pd.read_csv(inputfile2)
-    df1.drop(['Unnamed: 0','Unnamed: 3', 'Unnamed: 4', 'Unnamed: 5'], axis=1, inplace=True)
-    df1.rename(columns={'Name':'date', 'SCOTTISH MORTGAGE':'level'}, inplace=True)
+    #df1.rename(columns={'Name':'date', 'SCOTTISH MORTGAGE':'level'}, inplace=True)
+    #df1.drop(['Unnamed: 0','Unnamed: 3', 'Unnamed: 4', 'Unnamed: 5'], axis=1, inplace=True)
 
     # Standardise the column names and index
-    df1 = standardise_columns(df1, date_format1)
-    df1 = standardise_index(df1)
-    df2 = standardise_columns(df2[['Date','Adj Close']], date_format2)
+    #df1 = standardise_columns(df1, date_format1)
+    #df1 = standardise_index(df1)
+    if not update:
+        df2 = standardise_columns(df2[['Date','Adj Close']], date_format2)
+    else:
+        df2 = standardise_columns(df2[['Date','Close']], date_format2)
     df2 = standardise_index(df2)
 
 

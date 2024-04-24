@@ -43,7 +43,7 @@ def main():
       ticker = yf.Ticker(tickers[asset])
       df = ticker.history(period="max")
       filename = Path(new_data_folder) / f"{asset}.csv"
-      df.to_csv(filename)
+      df.to_csv(filename, date_format='%Y-%m-%d')
       # Save the updated data to a csv file
       print(f"Saving {asset} data to a {filename}")
 
@@ -96,11 +96,34 @@ def main():
     if not found_new:
       print(f"No new data file found for {asset}")
 
-    for asset in config_data['assets']:
-      if asset in new_data and asset in existing_data:
-        # Update the existing data with the new data
-        print(f"Updating {existing_data[asset]} with {new_data[asset]}")
-        update_existing_data(existing_data[asset], new_data[asset], config_data)
+  for asset in config_data['assets']:
+    # read and process new data according to the same rules as existing data
+    target_folder = config_data['intermediate data folder']
+    if asset == 'BTC':
+      data.extract_BTC_data(new_data_folder, target_folder, f"{asset}.csv", update=True)
+    if asset == 'SP500TR':
+      data.extract_SP500TR_data(new_data_folder, target_folder, f"{asset}.csv", update=True)
+    if asset == 'SP500':
+      data.extract_SP500_data(new_data_folder, target_folder, f"{asset}.csv", update=True)
+    if asset == 'DAX':
+      data.extract_DAX_data(new_data_folder, target_folder, f"{asset}.csv", update=True)
+    if asset == 'BRK':
+      data.extract_BRK_data(new_data_folder, target_folder, f"{asset}.csv", update=True)
+    #if asset == 'FED':
+    #  data.extract_FED_data(new_data_folder, target_folder,  f"{asset}.csv", update=True)
+    if  asset == 'BOE':
+      data.extract_BOE_data(new_data_folder, target_folder, f"{asset}.csv", update=True)
+    if  asset == 'FEDM':
+      data.extract_FEDM_data(new_data_folder, target_folder,  f"{asset}.csv", update=True)
+    if  asset == 'IRDE':
+      data.extract_IRDE_data(new_data_folder, target_folder, f"{asset}.csv", update=True)
+    if  asset == 'DGS10':
+      data.extract_DGS10_data(new_data_folder, target_folder, f"{asset}.csv", update=True)
+    if  asset == 'MAD':
+      #Do nothing - the MAD data is historic and should not be updated
+      continue
+    if  asset == 'SMT':
+      data.extract_SMT_data(new_data_folder, target_folder, f"{asset}.csv", update=True)
 
 if __name__ == "__main__":
   main()
