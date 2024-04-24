@@ -51,15 +51,14 @@ def standardise_index(df, fill_method='forward fill'):
     df.index = df.index.rename('date')
     return df
 
-def extract_BTC_data(source_folder, target_folder):
+def extract_BTC_data(source_folder, target_folder, sourcedata):
     print("  Extracting BTC data.")
-    # Bitcoin Price Index from Coindesk
+    # Old Bitcoin Price Index from Coindesk - never updates
     inputfile1 = source_folder+'BPI_2010-07-18_2018-04-06_Coindesk.csv'
     date_format1 = '%Y-%m-%d %H:%M:%S'
-    # BTC-USC FX pair from Yahoo Finance
-    inputfile2 = source_folder+'BTC-USD_2014-09-17_2020-05-01_YF.csv'
+    # BTC-USC FX pair from Yahoo Finance. Can be updated.
+    inputfile2 = source_folder+sourcedata
     date_format2 = '%Y-%m-%d'
-    # Need to specify the date format used by these files
 
     # Output files
     outputfile = target_folder+'BTC'
@@ -85,7 +84,7 @@ def extract_BTC_data(source_folder, target_folder):
     df3.to_csv(outputfile+'.csv')
     df3.to_pickle(outputfile+'.pkl')
 
-def extract_SP500TR_data(source_folder, target_folder):
+def extract_SP500TR_data(source_folder, target_folder, sourcedata):
     print("  Extracting SP500 TR data.")
     # SP500 Total Return index from Yahoo Finance
     inputfile = source_folder+'SP500TR_1988-01-04_2020-04-30_YF.csv'
@@ -105,7 +104,7 @@ def extract_SP500TR_data(source_folder, target_folder):
     df.to_csv(outputfile+'.csv')
     df.to_pickle(outputfile+'.pkl')
 
-def extract_SP500_data(source_folder, target_folder):
+def extract_SP500_data(source_folder, target_folder, sourcedata):
     print("  Extracting SP500 data.")
     # SP500 index from Yahoo Finance
     inputfile = source_folder+'SP500_1927-12-31_2020-05-14.csv'
@@ -125,7 +124,7 @@ def extract_SP500_data(source_folder, target_folder):
     df.to_csv(outputfile+'.csv')
     df.to_pickle(outputfile+'.pkl')
 
-def extract_DAX_data(source_folder, target_folder):
+def extract_DAX_data(source_folder, target_folder, sourcedata):
     print("  Extracting DAX data.")
     # DAX index from Yahoo Finance
     inputfile = source_folder+'DAX_1987-12-30_2020-04-30_YF.csv'
@@ -145,7 +144,7 @@ def extract_DAX_data(source_folder, target_folder):
     df.to_csv(outputfile+'.csv')
     df.to_pickle(outputfile+'.pkl')
 
-def extract_BRK_data(source_folder, target_folder):
+def extract_BRK_data(source_folder, target_folder, sourcedata):
     print("  Extracting BRK data.")
     # Berkshire share price from Yahoo Finance
     inputfile = source_folder+'BRK_1980-03-17_2020-04-30_YF.csv'
@@ -185,7 +184,7 @@ def extract_BRK_data(source_folder, target_folder):
 #     df.to_csv(outputfile+'.csv')
 #     df.to_pickle(outputfile+'.pkl')
 
-def extract_FED_data(source_folder, target_folder):
+def extract_FED_data(source_folder, target_folder, sourcedata):
     print("  Extracting FED data.")
     # Federal overnight rates from https://t.co/FDm5p3P828?amp=1
     inputfile1 = source_folder+'FED_1927-12-30_2020-05-14.csv'
@@ -225,7 +224,7 @@ def extract_FED_data(source_folder, target_folder):
     df3.to_csv(outputfile+'.csv')
     df3.to_pickle(outputfile+'.pkl')
 
-def extract_FEDM_data(source_folder, target_folder):
+def extract_FEDM_data(source_folder, target_folder, sourcedata):
     print("  Extracting FED monthly data.")
     # Federal overnight rates from FRED
     inputfile = source_folder+'FED_1954-07-01_2020-03-01-FRED.csv'
@@ -245,7 +244,7 @@ def extract_FEDM_data(source_folder, target_folder):
     df.to_csv(outputfile+'.csv')
     df.to_pickle(outputfile+'.pkl')
 
-def extract_DGS10_data(source_folder, target_folder):
+def extract_DGS10_data(source_folder, target_folder, sourcedata):
     print("  Extracting DGS10 data.")
     # 10-Year Treasury Constant Maturity Rates from FRED
     inputfile = source_folder+'DGS10_1962-01-02_2020-05-07_FRED.csv'
@@ -270,7 +269,7 @@ def extract_DGS10_data(source_folder, target_folder):
     df.to_csv(outputfile+'.csv')
     df.to_pickle(outputfile+'.pkl')
 
-def extract_BOE_data(source_folder, target_folder):
+def extract_BOE_data(source_folder, target_folder, sourcedata):
     print("  Extracting BOE data.")
     # Bank of England official bank rate
     inputfile = source_folder+'BOE_1975-01-20_2023-08-03.csv'
@@ -295,7 +294,7 @@ def extract_BOE_data(source_folder, target_folder):
     df.to_csv(outputfile+'.csv')
     df.to_pickle(outputfile+'.pkl')
 
-def extract_IRDE_data(source_folder, target_folder):
+def extract_IRDE_data(source_folder, target_folder, sourcedata):
     print("  Extracting German IR data.")
     # SP500 Total Return index from Yahoo Finance
     inputfile = source_folder+'IRDE_1960-01-01_2020-03-01-FRED.csv'
@@ -315,7 +314,7 @@ def extract_IRDE_data(source_folder, target_folder):
     df.to_csv(outputfile+'.csv')
     df.to_pickle(outputfile+'.pkl')
 
-def extract_Madoff_data(source_folder, target_folder):
+def extract_Madoff_data(source_folder, target_folder, sourcedata):
     print("  Extracting Madoff data.")
     # Madoff data
     inputfile = source_folder+'MAD_1990-01-01_2005-05-01_DU.csv'
@@ -339,7 +338,7 @@ def extract_Madoff_data(source_folder, target_folder):
     df.to_csv(outputfile+'.csv')
     df.to_pickle(outputfile+'.pkl')
 
-def extract_SMT_data(source_folder, target_folder):
+def extract_SMT_data(source_folder, target_folder, sourcedata):
     print("  Extracting SMT data.")
     # SMT Total Return data from BG
     inputfile1 = source_folder+'SMT_1964-12-30_2022-03-31.xlsx'

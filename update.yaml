@@ -2,8 +2,9 @@
 
 existing data folder: './data/1-source/'
 new data folder: './data/3-update/'
+download new data: False
 
-risky assets:
+assets:
   - BTC
   - MAD
   - SP500
@@ -11,12 +12,26 @@ risky assets:
   - DAX
   - BRK
   - SMT
-
-riskless assets:
   - FED
   - BOE
   - DGS10
   - IRDE
+
+tickers:
+  BTC : BTC
+  SP500 : ^SPX
+  SP500TR : ^SP500TR
+  DAX : ^GDAXI
+  BRK : BRK-A
+  SMT : SMT.L
+
+update from YF:
+  - BTC
+  - SP500
+  - SP500TR
+  - DAX
+  - BRK
+  - SMT
 
 # Define key-value pairs
 #key1: value1
