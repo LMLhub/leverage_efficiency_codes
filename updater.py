@@ -54,7 +54,7 @@ def main():
   folder_path = Path(new_data_folder)
   if folder_path.is_dir():
     # Read the names of the files in the folder into a list
-    new_file_names = [file.name for file in folder_path.iterdir() if file.is_file()]
+    new_file_names = [file for file in folder_path.iterdir() if file.is_file()]
   else:
     print(f"Error: {new_data_folder} is not a valid folder!")
     return
@@ -66,39 +66,14 @@ def main():
   folder_path = Path(existing_data_folder)
   if folder_path.is_dir():
     # Read the names of the files in the folder into a list
-    existing_file_names = [file.name for file in folder_path.iterdir() if file.is_file()]
+    existing_file_names = [file for file in folder_path.iterdir() if file.is_file()]
   else:
     print(f"Error: {new_data_folder} is not a valid folder!")
     return
 
-  # Do stuff for each asset
-  for asset in config_data['assets']:
-    #print(f"Checking if an existing csv data file can be found for {asset}...")
-    # Check if existing csv data file can be found and is readable
-    found_new=False
-    found_existing=False
-    existing_data={}
-    new_data={}
-    for name in existing_file_names:
-      if asset in name and name.endswith('.csv'):
-        print(f"{asset} : {name}")
-        existing_data[asset]=name
-        found_existing=True
-        break
-    for name in new_file_names:
-      if asset in name and name.endswith('.csv'):
-        new_data[asset]=name
-        print(f"{asset} : {name}")
-        found_new=True
-        break
-    if not found_existing:
-      print(f"No existing data file found for {asset}")
-    if not found_new:
-      print(f"No new data file found for {asset}")
-
   for asset in config_data['assets']:
     # read and process new data according to the same rules as existing data
-    target_folder = config_data['intermediate data folder']
+    target_folder = config_data['intermediate extra data folder']
     if asset == 'BTC':
       data.extract_BTC_data(new_data_folder, target_folder, f"{asset}.csv", update=True)
     if asset == 'SP500TR':
@@ -109,12 +84,12 @@ def main():
       data.extract_DAX_data(new_data_folder, target_folder, f"{asset}.csv", update=True)
     if asset == 'BRK':
       data.extract_BRK_data(new_data_folder, target_folder, f"{asset}.csv", update=True)
-    #if asset == 'FED':
-    #  data.extract_FED_data(new_data_folder, target_folder,  f"{asset}.csv", update=True)
+    if asset == 'FED':
+      data.extract_FED_data(new_data_folder, target_folder,  f"{asset}.csv", update=True)
     if  asset == 'BOE':
       data.extract_BOE_data(new_data_folder, target_folder, f"{asset}.csv", update=True)
-    if  asset == 'FEDM':
-      data.extract_FEDM_data(new_data_folder, target_folder,  f"{asset}.csv", update=True)
+    #if  asset == 'FEDM':
+    #  data.extract_FEDM_data(new_data_folder, target_folder,  f"{asset}.csv", update=True)
     if  asset == 'IRDE':
       data.extract_IRDE_data(new_data_folder, target_folder, f"{asset}.csv", update=True)
     if  asset == 'DGS10':
@@ -124,6 +99,87 @@ def main():
       continue
     if  asset == 'SMT':
       data.extract_SMT_data(new_data_folder, target_folder, f"{asset}.csv", update=True)
+
+
+  # Do merging of new and existing intermediate data for each asset
+  existing_data_folder = config_data['intermediate data folder']
+  folder_path = Path(existing_data_folder)
+  if folder_path.is_dir():
+    # Read the names of the files in the folder into a list
+    existing_file_names = [file for file in folder_path.iterdir() if file.is_file()]
+  else:
+    print(f"Error: {new_data_folder} is not a valid folder!")
+    return
+  new_data_folder = config_data['intermediate extra data folder']
+  folder_path = Path(new_data_folder)
+  if folder_path.is_dir():
+    # Read the names of the files in the folder into a list
+    new_file_names = [file for file in folder_path.iterdir() if file.is_file()]
+  else:
+    print(f"Error: {new_data_folder} is not a valid folder!")
+    return
+
+  new_file_names = [item for item in new_file_names if "FEDM" not in item.name]
+  existing_file_names = [item for item in existing_file_names if "FEDM" not in item.name]
+  for asset in config_data['assets']:
+    #print(f"Checking if an existing csv data file can be found for {asset}...")
+    # Check if existing csv data file can be found and is readable
+    found_new=False
+    found_existing=False
+    existing_data={}
+    new_data={}
+    for file in existing_file_names:
+      name=file.name
+      if asset in name and name.endswith('.csv'):
+        #print(f"{asset} : {file.resolve()}")
+        existing_data[asset]=file
+        found_existing=True
+        break
+    for file in new_file_names:
+      name=file.name
+      if asset in name and name.endswith('.csv'):
+        new_data[asset]=file
+        #print(f"{asset} : {file.resolve()}")
+        found_new=True
+        break
+    if not found_existing:
+      print(f"No existing data file found for {asset}")
+    if not found_new:
+      print(f"No new data file found for {asset}")
+    if found_existing and found_new:
+      print(f"New and existing data available for {asset}")
+      df_existing = pd.read_csv(existing_data[asset])
+      df_new = pd.read_csv(new_data[asset])
+      # Find start and end dates of new data
+      new_start_date = df_new['date'].min()
+      new_end_date = df_new['date'].max()
+      existing_start_date = df_existing['date'].min()
+      existing_end_date = df_existing['date'].max()
+      print("New: ", new_start_date, new_end_date)
+      print("Existing: ", existing_start_date, existing_end_date)
+      if new_end_date >= existing_end_date and new_start_date <= existing_end_date:
+        print(f"Dates for {asset} check out. Merging...")
+        if existing_end_date in df_new['date'].values:
+          print(f"Existing end date {existing_end_date} already exists in new data. Good!")
+          to_append = df_new[df_new['date'] > existing_end_date]
+          print(df_existing.tail())
+          print(f"\nAppending {to_append.shape[0]} rows to existing data")
+          df_existing = pd.concat([df_existing, to_append], ignore_index=True)
+          print(df_existing.tail())
+          # Finally write the file to the extended dataframe to the load folder
+          filename = Path(config_data['intermediate data folder']) / f"{asset}.csv"
+          print(f"Saving {asset} data to {filename}")
+          df_existing.to_csv(filename, date_format='%Y-%m-%d', index=False)
+          filename = Path(config_data['intermediate data folder']) / f"{asset}.pkl"
+          print(f"Saving {asset} data to {filename}")
+          df_existing['date'] = pd.to_datetime(df_existing['date'])
+          df_existing.set_index('date', inplace=True, drop=True)
+          df_existing.to_pickle(filename)
+      else:
+        print(f"Dates for {asset} do not check out. Need to investigate...")
+      print("\n")
+      #print(df_existing.columns)
+      #print(df_new.columns)
 
 if __name__ == "__main__":
   main()

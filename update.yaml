@@ -2,8 +2,11 @@
 
 existing data folder: './data/1-source/'
 new data folder: './data/3-update/'
-intermediate data folder: './data/2-intermediate/append/'
+intermediate data folder: './data/2-intermediate/'
+intermediate extra data folder: './data/2-intermediate/append/'
+processed data folder: './data/4-load/'
 download new data: False
+merge new data: True
 
 assets:
   - BTC
@@ -19,7 +22,7 @@ assets:
   - IRDE
 
 tickers:
-  BTC : BTC
+  BTC : BTC-USD
   SP500 : ^SPX
   SP500TR : ^SP500TR
   DAX : ^GDAXI
@@ -33,18 +36,3 @@ update from YF:
   - DAX
   - BRK
   - SMT
-
-# Define key-value pairs
-#key1: value1
-#key2: value2
-
-# Define nested objects
-#nested:
-#  key3: value3
-#  key4: value4
-
-# Define a boolean value
-#boolean: true
-
-# Define a null value
-# null_value: null

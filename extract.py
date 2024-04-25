@@ -17,7 +17,7 @@ def main(config_file):
         source_filenames = yaml.load(f, Loader=yaml.SafeLoader)
     sourcedata = source_filenames['file names']
     target_folder = config['intermediate data folder']
-    runstage = config['data processing stages']['run']
+    runstage = config['data processing stages']['run extract']
     assets = config['data processing stages']['assets']
     daily_interest_rates = config['data processing stages']['daily interest rates']
     monthly_interest_rates = config['data processing stages']['monthly interest rates']

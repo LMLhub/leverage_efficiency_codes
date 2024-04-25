@@ -200,8 +200,9 @@ def extract_BRK_data(source_folder, target_folder, sourcedata, update=False):
 def extract_FED_data(source_folder, target_folder, sourcedata, update=False):
     print("  Extracting FED data.")
     # Federal overnight rates from https://t.co/FDm5p3P828?amp=1
-    inputfile1 = source_folder+'FED_1927-12-30_2020-05-14.csv'
-    date_format1 = '%Y%m%d'
+    if not update:
+        inputfile1 = source_folder+'FED_1927-12-30_2020-05-14.csv'
+        date_format1 = '%Y%m%d'
    # Federal overnight rates from FRED
     #inputfile2 = source_folder+'FED_1954-07-01_2020-03-01-FRED.csv'
     inputfile2 = source_folder+sourcedata
@@ -211,28 +212,31 @@ def extract_FED_data(source_folder, target_folder, sourcedata, update=False):
     outputfile = target_folder+'FED'
 
     # Read in raw data
-    df1 = pd.read_csv(inputfile1,skiprows=5,skipfooter=1,engine='python',usecols=[0,4])
+    if not update:
+        df1 = pd.read_csv(inputfile1,skiprows=5,skipfooter=1,engine='python',usecols=[0,4])
+        # Standardise the column names and index
+        df1 = standardise_columns(df1, date_format1)
+        df1 = standardise_index(df1)
+        #Rates in this data set are quoted as daily percentage returns for trading days.
+        #This needs to be converted to annual interest rates in percent.
+        #Technically, they're quoted to reproduce a monthly return by compounding
+        #the trading days in the relevant month but it's all very rough anyway,
+        #and for now we pretend each month has the same number of trading days.
+        df1 = 100*(np.power((1+df1/100),252.75)-1)
     df2 = pd.read_csv(inputfile2)
-
-    # Standardise the column names and index
-    df1 = standardise_columns(df1, date_format1)
-    df1 = standardise_index(df1)
     df2 = standardise_columns(df2, date_format2)
     df2 = standardise_index(df2)
 
-    #Rates in this data set are quoted as daily percentage returns for trading days.
-    #This needs to be converted to annual interest rates in percent.
-    #Technically, they're quoted to reproduce a monthly return by compounding
-    #the trading days in the relevant month but it's all very rough anyway,
-    #and for now we pretend each month has the same number of trading days.
-    df1 = 100*(np.power((1+df1/100),252.75)-1)
 
-    # Splice these timeseries together at these dates:
-    d1 = datetime.date(1954,6,30)
-    d2 = datetime.date(1954,7,1)
-    # Append the relevant slice of df2 to the relevant slice of df1
-    #df3 = df1.loc[:d1].append(df2.loc[d2:])
-    df3=pd.concat([df1.loc[:d1],df2.loc[d2:]])
+    if not update:
+        # Splice these timeseries together at these dates:
+        d1 = datetime.date(1954,6,30)
+        d2 = datetime.date(1954,7,1)
+        # Append the relevant slice of df2 to the relevant slice of df1
+        #df3 = df1.loc[:d1].append(df2.loc[d2:])
+        df3=pd.concat([df1.loc[:d1],df2.loc[d2:]])
+    else:
+        df3 = df2
 
     # Write output
     df3.to_csv(outputfile+'.csv')
@@ -380,10 +384,10 @@ def extract_SMT_data(source_folder, target_folder, sourcedata, update=False):
     #df1 = standardise_columns(df1, date_format1)
     #df1 = standardise_index(df1)
     if not update:
-        df2 = standardise_columns(df2[['Date','Adj Close']], date_format2)
+        df = standardise_columns(df2[['Date','Adj Close']], date_format2)
     else:
-        df2 = standardise_columns(df2[['Date','Close']], date_format2)
-    df2 = standardise_index(df2)
+        df = standardise_columns(df2[['Date','Close']], date_format2)
+    df = standardise_index(df)
 
 
     # Splice these timeseries together at these dates:
@@ -399,8 +403,8 @@ def extract_SMT_data(source_folder, target_folder, sourcedata, update=False):
 
 
     # Write output
-    df2.to_csv(outputfile+'.csv')
-    df2.to_pickle(outputfile+'.pkl')
+    df.to_csv(outputfile+'.csv')
+    df.to_pickle(outputfile+'.pkl')
 
     #Note: we're not splicing the two data sets together here because they are incompatible.
     #it's unclear what the adjusted prices in the BG data set are, so restricting to yahoo! here.

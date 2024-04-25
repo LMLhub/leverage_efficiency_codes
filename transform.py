@@ -13,7 +13,7 @@ def main(config_file):
     source_folder = config['intermediate data folder']
     target_folder = config['data_folder']
     assets = config['data processing stages']['assets']
-    runstage = config['data processing stages']['run']
+    runstage = config['data processing stages']['run transform']
     daily_interest_rates = config['data processing stages']['daily interest rates']
     monthly_interest_rates = config['data processing stages']['monthly interest rates']
 
