@@ -1,3 +1,25 @@
+# Run the extract pipeline stage on the data to create the asset file
+# data/2-intermediate/XYZ.csv
+#
+# Download new data into data/1-source/update/XYZ.csv It must be named XYZ.csv where XYZ
+# is the key (BTC,SP500, SP500TR,BRK, FED etc) defined in the config file to refer to
+# this asset. There is a script provided to automatically query Yahoo Finance for
+# assets that are available there.
+#
+# Run the extract pipeline stage on the new data to create the asset file
+# data/2-intermediate/update/XYZ.csv
+#
+# Run the merge script to attempt to merge data/2-intermediate/XYZ.csv with
+# data/2-intermediate/update/XYZ.csv and if it succeeds, overwrite the original
+# data/2-intermediate/XYZ.csv file with the updated data
+#
+# Run the transform pipeline stage to create the asset file
+# data/4-load/XYZ.csv from the updated data/2-intermediate/XYZ.csv
+#
+# Switch off the extract and transform pipeline stages and run the rest of the
+# pipeline. Note that the updated data will be overwritten if the extract pipeline
+# stage is run again.
+
 import argparse
 import os
 import yaml
@@ -73,6 +95,7 @@ def main():
 
   for asset in config_data['assets']:
     # read and process new data according to the same rules as existing data
+    new_data_folder = config_data['new data folder']
     target_folder = config_data['intermediate extra data folder']
     if asset == 'BTC':
       data.extract_BTC_data(new_data_folder, target_folder, f"{asset}.csv", update=True)
@@ -130,16 +153,16 @@ def main():
     new_data={}
     for file in existing_file_names:
       name=file.name
-      if asset in name and name.endswith('.csv'):
-        #print(f"{asset} : {file.resolve()}")
+      if asset+'.' in name and name.endswith('.csv'):
+        print(f"{asset} : {file.resolve()}")
         existing_data[asset]=file
         found_existing=True
         break
     for file in new_file_names:
       name=file.name
-      if asset in name and name.endswith('.csv'):
+      if asset+'.' in name and name.endswith('.csv'):
         new_data[asset]=file
-        #print(f"{asset} : {file.resolve()}")
+        print(f"{asset} : {file.resolve()}")
         found_new=True
         break
     if not found_existing:

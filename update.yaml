@@ -1,6 +1,6 @@
 # YAML file containing information helpful for updating the source data
 
-existing data folder: './data/1-source/'
+existing data folder: './data/2-intermediate/'
 new data folder: './data/3-update/'
 intermediate data folder: './data/2-intermediate/'
 intermediate extra data folder: './data/2-intermediate/append/'
@@ -9,17 +9,17 @@ download new data: False
 merge new data: True
 
 assets:
-  - BTC
-  - MAD
+#  - BTC
+#  - MAD
   - SP500
-  - SP500TR
-  - DAX
-  - BRK
-  - SMT
-  - FED
-  - BOE
-  - DGS10
-  - IRDE
+#  - SP500TR
+#  - DAX
+#  - BRK
+#  - SMT
+#  - FED
+#  - BOE
+#  - DGS10
+#  - IRDE
 
 tickers:
   BTC : BTC-USD
