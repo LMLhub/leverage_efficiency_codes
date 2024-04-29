@@ -15,8 +15,8 @@ plots_folder: './data/6-figures/'
 # This section specifies which data sets to process in the extract, transform and update
 # pipeline stages
 data processing stages:
-  run extract: True
-  run transform: False
+  run extract: False
+  run transform: True
   assets:
     - BTC
     - MAD
@@ -37,7 +37,7 @@ data processing stages:
 # stage, including which pairs to analyse and which steps of the analysis to run
 # and what parameters to pass into the analysis.
 analysis:
-  run: False
+  run: True
   pairs:
     - BTC-FED
     - BRK-FED
@@ -54,7 +54,7 @@ analysis:
 # This section provides control over the plots pipeline stage, including which
 # pairs to plots and which figures to generate for each pair.
 plots:
-  run: False
+  run: True
   pairs:
     - BTC-FED
     - SP500-FED

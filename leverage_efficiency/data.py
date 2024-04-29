@@ -6,6 +6,7 @@ import yfinance as yf
 import datetime
 from . import base
 import leverage_efficiency.sme_functions as sme
+from datetime import date
 
 # Functions to open source data files shipping with repository to create
 # standard data to load into the pipeline. These are hardcoded since we are using
@@ -15,7 +16,8 @@ import leverage_efficiency.sme_functions as sme
 
 # There is a problem with dates prior to 1969 being parsed as future dates
 def fix_date(x):
-    if x.year > 2020:
+    current_date = date.today()
+    if x.year > current_date.year:
         year = x.year - 100
     else:
         year = x.year
@@ -125,6 +127,7 @@ def extract_SP500_data(source_folder, target_folder, sourcedata, update=False):
 
     # Read in raw data
     df = pd.read_csv(inputfile)[['Date','Close']]
+
 
     # Standardise the column names and index
     df = standardise_columns(df, date_format, fix_dates=True)

@@ -1,26 +1,15 @@
 # YAML file containing information helpful for updating the source data
 
+new data folder: './data/1-source/update/'
+intermediate data folder: './data/2-intermediate/update/'
 existing data folder: './data/2-intermediate/'
-new data folder: './data/3-update/'
-intermediate data folder: './data/2-intermediate/'
-intermediate extra data folder: './data/2-intermediate/append/'
 processed data folder: './data/4-load/'
 download new data: False
+extract new data: False
 merge new data: True
 
-assets:
-#  - BTC
-#  - MAD
-  - SP500
-#  - SP500TR
-#  - DAX
-#  - BRK
-#  - SMT
-#  - FED
-#  - BOE
-#  - DGS10
-#  - IRDE
-
+# List the Bloomberg tickers of any assets that can be downloaded from Yahoo
+# Finance
 tickers:
   BTC : BTC-USD
   SP500 : ^SPX
@@ -29,6 +18,7 @@ tickers:
   BRK : BRK-A
   SMT : SMT.L
 
+# List the keys of the assets to download from Yahoo Finance
 update from YF:
   - BTC
   - SP500
@@ -36,3 +26,17 @@ update from YF:
   - DAX
   - BRK
   - SMT
+
+# List the keys of the assets to extract and/or merge
+assets:
+  - BTC
+#  - MAD
+  - SP500
+  - SP500TR
+  - DAX
+  - BRK
+  - SMT
+  - FED
+  - BOE
+  - DGS10
+  - IRDE
